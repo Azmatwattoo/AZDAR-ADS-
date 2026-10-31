@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080713">
+<title>Member Dashboard | Ads+</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+ background:
+ radial-gradient(circle at 10% 0%,#321052,transparent 35%),
+ radial-gradient(circle at 100% 100%,#063c50,transparent 35%),
+ #080713;
+ color:#fff;
+ font-family:Arial,sans-serif;
+ min-height:100vh;
+ padding:18px;
+}
+
+header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:12px 0 25px;
+}
+
+.logo{font-size:25px;font-weight:bold}
+.logo span{color:#00e5ff}
+
+.logout{
+ text-decoration:none;
+ color:#00e5ff;
+ border:1px solid #00e5ff;
+ padding:9px 14px;
+ border-radius:9px;
+ font-size:12px;
+}
+
+.welcome{margin:20px 0 25px}
+.welcome h1{font-size:25px;margin-bottom:8px}
+.welcome p{color:#aaa;font-size:13px}
+
+.status{
+ display:inline-block;
+ color:#00e5a0;
+ background:#063b2d;
+ padding:7px 12px;
+ border-radius:20px;
+ font-size:11px;
+ margin-top:12px;
+}
+
+.section-title{
+ font-size:18px;
+ margin:25px 0 15px;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:13px;
+}
+
+.card{
+ background:rgba(23,20,43,.9);
+ border:1px solid #34304e;
+ padding:19px 15px;
+ border-radius:15px;
+ min-height:115px;
+}
+
+.card p{
+ color:#aaa;
+ font-size:12px;
+ margin-bottom:13px;
+}
+
+.card h2{
+ font-size:27px;
+ color:#00e5ff;
+}
+
+.card.highlight{
+ border-color:#a855f7;
+}
+
+.card.highlight h2{color:#c084fc}
+
+.plan-box{
+ background:linear-gradient(120deg,#281047,#102b42);
+ border:1px solid #7250a3;
+ padding:20px;
+ border-radius:17px;
+ margin-top:15px;
+}
+
+.plan-box h2{
+ color:#d7a4ff;
+ margin:10px 0;
+}
+
+.plan-box p{
+ color:#c5bdd7;
+ font-size:13px;
+ line-height:1.8;
+}
+
+.progress-bg{
+ height:9px;
+ background:#302c42;
+ border-radius:20px;
+ overflow:hidden;
+ margin:15px 0 8px;
+}
+
+.progress{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,#a855f7,#00e5ff);
+}
+
+.action{
+ display:block;
+ text-decoration:none;
+ text-align:center;
+ padding:16px;
+ border-radius:12px;
+ margin-top:20px;
+ background:linear-gradient(100deg,#a855f7,#00d9ed);
+ color:#080713;
+ font-weight:bold;
+}
+
+.timer{
+ text-align:center;
+ margin-top:20px;
+ background:#151329;
+ border:1px solid #34304e;
+ padding:17px;
+ border-radius:14px;
+}
+
+.timer p{color:#aaa;font-size:12px}
+.timer h2{color:#00e5ff;margin-top:10px}
+
+footer{
+ text-align:center;
+ color:#777;
+ font-size:11px;
+ padding:35px 0 15px;
+}
+
+@media(min-width:650px){
+ body{max-width:850px;margin:auto;padding:30px}
+ .stats{grid-template-columns:repeat(4,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">ADS<span>+</span></div>
+ <a class="logout" href="index.html">LOGOUT</a>
+</header>
+
+<section class="welcome">
+ <h1>Member Dashboard</h1>
+ <p>Welcome to your advertisement portal.</p>
+ <span class="status">● Account Status: Active</span>
+</section>
+
+<h3 class="section-title">Your Statistics</h3>
+
+<section class="stats">
+
+ <div class="card highlight">
+  <p>Active Plan</p>
+  <h2 id="plan">Plan 1</h2>
+ </div>
+
+ <div class="card">
+  <p>Seen Ads</p>
+  <h2 id="seen">0</h2>
+ </div>
+
+ <div class="card">
+  <p>Total Ads</p>
+  <h2 id="total">10</h2>
+ </div>
+
+ <div class="card">
+  <p>Remaining Ads</p>
+  <h2 id="remaining">10</h2>
+ </div>
+
+</section>
+
+<h3 class="section-title">Membership Details</h3>
+
+<section class="plan-box">
+ <p>YOUR CURRENT MEMBERSHIP</p>
+ <h2 id="planName">Plan 1</h2>
+ <p id="planDetails">Daily advertisement limit: 10 ads</p>
+
+ <div class="progress-bg">
+  <div class="progress" id="progress"></div>
+ </div>
+
+ <p id="progressText">0% Completed</p>
+</section>
+
+<h3 class="section-title">Advertisement Center</h3>
+
+<a href="ads.html" class="action">▶ SEE ADVERTISEMENTS</a>
+
+<section class="timer">
+ <p>NEXT ADS CYCLE</p>
+ <h2 id="timer">Not Started</h2>
+ <p style="margin-top:9px">
+  Timer starts after all assigned ads are completed.
+ </p>
+</section>
+
+<footer>
+ADS+ MEMBER PORTAL<br><br>
+© 2026 Ads Platform
+</footer>
+
+<script>
+// Temporary preview data.
+// Real member data will come from Supabase.
+
+const member = {
+ plan: 1,
+ seen: 0
+};
+
+const limits = {
+ 1: 10,
+ 2: 20,
+ 3: 30,
+ 4: 40,
+ 5: 50
+};
+
+const total = limits[member.plan];
+const remaining = Math.max(0,total-member.seen);
+const percent = Math.round(member.seen/total*100);
+
+document.getElementById("plan").textContent =
+ "Plan " + member.plan;
+
+document.getElementById("planName").textContent =
+ "Plan " + member.plan;
+
+document.getElementById("planDetails").textContent =
+ "Daily advertisement limit: " + total + " ads";
+
+document.getElementById("seen").textContent =
+ member.seen;
+
+document.getElementById("total").textContent =
+ total;
+
+document.getElementById("remaining").textContent =
+ remaining;
+
+document.getElementById("progress").style.width =
+ percent + "%";
+
+document.getElementById("progressText").textContent =
+ percent + "% Completed";
+</script>
+
+</body>
+</html>
